@@ -1,7 +1,7 @@
   <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Shopping Cart</a>
+                <a class="navbar-brand" href="/">Shopping Cart</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +20,8 @@
                             
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="/cart" tabindex="-1" aria-disabled="true">Cart</a>
+                            <a class="nav-link " href="/cart" tabindex="-1" 
+                            aria-disabled="true">Cart<span class="badge badge-secondary" id="cart-count">{{cartCount}}</span></h1></a>
                         </li>
                     </ul>
                     <div class="dropdown ml-auto">

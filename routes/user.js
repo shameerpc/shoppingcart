@@ -14,13 +14,16 @@ const verifyLogin=(req,res,next)=>{
 
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/',async function(req, res, next) {
   let user=req.session.user
-  
+  let cartCount=0
+  if(req.session.user){
+  cartCount=await userHelpers.getCartCount(req.session.user._id)
+  }
   productHelpers.getAllProduct().then((products)=>{
     
     
-    res.render('user/view-products',{products,user});
+    res.render('user/view-products',{products,user,cartCount});
   })
 })
 router.get('/login',(req,res)=>{
@@ -49,7 +52,7 @@ router.post('/login',(req,res)=>{
 
         res.redirect('/');
       }else{
-        req.session.loginErr="inavalid username or password";
+        req.session.loginErr="invalid username or password";
         res.redirect('/login');
       }
     })  
@@ -58,15 +61,31 @@ router.post('/login',(req,res)=>{
     req.session.destroy();
     res.redirect('/');
  })
- router.get('/cart',verifyLogin,(req,res)=>{
-   res.render('user/cart')
+ router.get('/cart',verifyLogin,async(req,res)=>{
+   let products=await userHelpers.getCartProducts(req.session.user._id)
+   console.log(products)
+   res.render('user/cart',{products,user:req.session.user})
  })  
- router.get('/add-to-cart',(req,res)=>{
-    userHelpers.addToCart(req.params._id,req.session.user._id).then(()=>{
-      res.render('/')
+ router.get('/add-to-cart/:id',(req,res)=>{
+   console.log("api call");
+   
+    userHelpers.addToCart(req.params.id,req.session.user._id).then(()=>{
+     
+      res.json({status:true})
     })
  })
-
+router.post('/change-product-quantity',(req,res,next)=>{
+   
+   userHelpers.changeProductQuantity(req.body).then((response)=>{
+      res.json(response);
+   })
+})
+router.post('/remove-button',(req,res,next)=>{
+  
+  userHelpers.removeCartProduct(req.body).then((response)=>{
+    res.json(response);
+  })
+})
 
 
 module.exports = router;

@@ -9,13 +9,19 @@
                     <img style="height: 19rem;" src="/product-images/{{this._id}}.jpg" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{this.Name}}</h5>
+                           <p class="card-text">Rs.{{this.Price}}</p>
                         <p class="card-text">{{this.Description}}</p>
-                        <a href="/add-to-cart/{{this._id}}" class="btn btn-primary">Add To Cart</a>
+                     
+                       
+                        <button onclick="addToCart('{{this._id}}')" class="btn btn-primary">Add To Cart</button>
                     </div>
                 </div>
             </div>
             {{/each}}
         </div>
-
     </div>
 </section>
+
+<script>
+ 
+</script>
