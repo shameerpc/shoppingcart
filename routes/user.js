@@ -63,8 +63,9 @@ router.post('/login',(req,res)=>{
  })
  router.get('/cart',verifyLogin,async(req,res)=>{
    let products=await userHelpers.getCartProducts(req.session.user._id)
-   console.log(products)
-   res.render('user/cart',{products,user:req.session.user})
+   let totalValue=await userHelpers.getTotalAmount(req.session.user._id)
+   
+   res.render('user/cart',{products,user:req.session.user._id,totalValue})
  })  
  router.get('/add-to-cart/:id',(req,res)=>{
    console.log("api call");
@@ -76,7 +77,8 @@ router.post('/login',(req,res)=>{
  })
 router.post('/change-product-quantity',(req,res,next)=>{
    
-   userHelpers.changeProductQuantity(req.body).then((response)=>{
+   userHelpers.changeProductQuantity(req.body).then(async(response)=>{
+    response.total=await userHelpers.getTotalAmount(req.body.user)
       res.json(response);
    })
 })
@@ -85,6 +87,32 @@ router.post('/remove-button',(req,res,next)=>{
   userHelpers.removeCartProduct(req.body).then((response)=>{
     res.json(response);
   })
+})
+router.get('/place-order',verifyLogin,async (req,res)=>{
+  let total=await userHelpers.getTotalAmount(req.session.user._id)
+    res.render('user/place-order',{total,user:req.session.user});
+})
+router.post('/place-order',async(req,res)=>{
+  let products=await userHelpers.getCartProductList(req.session.user._id)
+  
+  let totalPrize=await userHelpers.getTotalAmount(req.body.userId)
+  userHelpers.placeOrder(req.body,products,totalPrize).then((response)=>{
+    res.json({status:true})
+  })
+  
+})
+router.get('/order-success',(req,res)=>{
+  res.render('user/order-success',{user:req.session.user})
+})
+router.get('/orders',async(req,res)=>{
+  let orders=await userHelpers.getUserOrders(req.session.user._id)
+  
+  res.render('user/orders',{user:req.session.user,orders})
+})
+router.get('/view-order-products/:id',async(req,res)=>{
+  let products=await userHelpers.getOrderProducts(req.params.id)
+  
+   res.render('user/view-order-products',{user:req.session.user,products})
 })
 
 

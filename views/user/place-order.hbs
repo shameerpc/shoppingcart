@@ -1,0 +1,55 @@
+<section>
+    <div class="container mt-5">
+        <form action="" id="checkout-form">
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>Enter Delivary Details</h2>
+                    <div>
+                        <label form="">Address</label>
+                        <input class="form-control" type="text" id="address" name="address">
+                        <label form="">pincode</label>
+                        <input class="form-control" type="text" id="pincode" name="pincode">
+                        <label form="">mobile</label>
+                        <input class="form-control" type="text" id="mobile" name="mobile">
+                        <input type="text" name="userId" id="" value="{{user._id}}" hidden>
+
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="container mt-5 ml-5 checkout">
+                        <h5>total amount : Rs.{{total}}</h5>
+                        <hr>
+                        <div class="payment">
+                            <p>payment methord</p>
+                            <label class="radio-inline">
+                                <input type="radio" name="payment-method" value="COD">COD
+                            </label>
+                            <label class="radio-inline mt-2">
+                                <input type="radio" name="payment-method" value="ONLINE" >online payment
+                            </label>
+                            <button class="btn btn-primary float-right" type="submit">Checkout</button> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+<script>
+    $('#checkout-form').submit((e)=>{
+       e.preventDefault()
+       $.ajax({
+           url:'/place-order',
+           method:'post',
+           data:$('#checkout-form').serialize(),
+           success:(response)=>{
+               alert(response)
+               if(response.status){
+                  location.href='/order-success'
+               }
+           }
+       })
+    })
+</script>
