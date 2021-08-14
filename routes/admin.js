@@ -76,9 +76,9 @@ router.get('/login',(req,res)=>{
   
 })
 router.post('/login',(req,res)=>{
-  userHelpers.adminLogin(req.body).then((data)=>{
+  userHelpers.adminLogin(req.body).then((response)=>{
     console.log(req.body);
-    if(data.status){
+    if(response.status){
       req.session.admin=response.admin
       req.session.adminLoggedIn=true;
 
